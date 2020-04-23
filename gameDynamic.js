@@ -1,3 +1,47 @@
+//Snake
+class Snake{
+    constructor(direction, body, isAlive = true){
+        this.direction = direction; //"down", "up", "left", "right"
+        this.body = body;
+        this.isAlive = isAlive;
+    }
+
+    move(){
+        var length = snake.body.length;
+
+        //Body mouvement
+        for(var i = 1; i < length; i++){
+            let x = snake.body[length-i-1].x, y = snake.body[length-i-1].y;
+            snake.body[length-i].setXY(x,y);
+        }
+
+        //Head mouvement
+        var x = snake.body[0].x, y = snake.body[0].y;
+        if(snake.direction === "up"){
+            snake.body[0].setXY(x, y-1);
+        }else if(snake.direction === "down"){
+            snake.body[0].setXY(x, y+1);
+        }else if(snake.direction === "right"){
+            snake.body[0].setXY(x+1, y);
+        }else if(snake.direction === "left"){
+            snake.body[0].setXY(x-1, y);
+        }
+
+        x = snake.body[0].x, y=snake.body[0].y;
+        //When snake is outside gameArea
+        if(snake.body[0].x < 0){
+            snake.body[0].setXY(gameAreaWidth/snakeSize-1, y);
+        }else if(snake.body[0].x > gameAreaWidth/snakeSize-1){
+            snake.body[0].setXY(0, y);
+        }else if(snake.body[0].y < 0){
+            snake.body[0].setXY(x, gameAreaHeight/snakeSize-1)
+        }else if(snake.body[0].y > gameAreaHeight/snakeSize-1){
+            snake.body[0].setXY(x, 0);
+        }
+    }
+}
+var snake = new Snake("down", [head, piece1, piece2, piece3]);
+
 document.addEventListener("keydown",function(event){
     //Read input
     //  Prevent turnback and eat it own
@@ -13,77 +57,6 @@ document.addEventListener("keydown",function(event){
     }
 });
 
-function updateMouvement(){
-    var length = snake.body.length;
-
-    //Get last snake piece
-    var lastX = snake.body[length-1].x;
-    var lastY = snake.body[length-1].y;
-
-    //Body mouvement
-    for(var i=1;i<snake.body.length;i++){
-        snake.body[length-i].x = snake.body[length-i-1].x;
-        snake.body[length-i].y = snake.body[length-i-1].y;
-    }
-
-    //Head mouvement
-    if(snake.direction==="up"){
-        snake.body[0].y--;
-    }else if(snake.direction==="down"){
-        snake.body[0].y++;
-    }else if(snake.direction==="right"){
-        snake.body[0].x++;
-    }else if(snake.direction==="left"){
-        snake.body[0].x--;
-    }
-
-    //When snake is outside gameArea
-    if(snake.body[0].x<0){
-        snake.body[0].x = gameAreaWidth/snakeSize-1;
-    }else if(snake.body[0].x>gameAreaWidth/snakeSize-1){
-        snake.body[0].x = 0;
-    }else if(snake.body[0].y<0){
-        snake.body[0].y = gameAreaHeight/snakeSize-1
-    }else if(snake.body[0].y>gameAreaHeight/snakeSize-1){
-        snake.body[0].y = 0;
-    }
-
-    //Snake eat fruit
-    if(snake.body[0].x === fruit.x && snake.body[0].y === fruit.y){
-        var snakeNewPiece = document.createElement("div");
-        snakeNewPiece.className = "box";
-        snakeNewPiece.style.width = snakeSize;
-        snakeNewPiece.style.height = snakeSize;
-        snakeNewPiece.style.position = "absolute";
-        snakeNewPiece.style.top = 0;
-        snakeNewPiece.style.left = 0;
-        snakeNewPiece.style.backgroundColor = snakeColor;
-        snake.body.push({x:lastX,y:lastY,piece:snakeNewPiece});
-        findRandomPosition(); //fruit new position
-        increaseScore();
-    }
-
-    //Snake eat snake
-    for(var i=1;i<snake.body.length;i++){
-        if(snake.body[0].x===snake.body[i].x && snake.body[0].y===snake.body[i].y){
-            resetScore();
-            snake.body=[];
-            snake.body.push({x:initialX,y:initialY,piece:head});
-            snake.body.push({x:initialX,y:initialY-1,piece:piece1});
-            snake.body.push({x:initialX,y:initialY-2,piece:piece2});
-            snake.body.push({x:initialX,y:initialY-3,piece:piece3});
-        }
-    }
-
-    //Adjust snake and fruit div positions
-    for(var i=0;i<snake.body.length;i++){
-        snake.body[i].piece.style.top = snake.body[i].y*snakeSize+"px";
-        snake.body[i].piece.style.left = snake.body[i].x*snakeSize+"px";
-    }
-    fruit.piece.style.top = fruit.y*snakeSize;
-    fruit.piece.style.left = fruit.x*snakeSize;
-}
-
 function findRandomPosition(){
     var fruitIsOnSnake = true;
     var x,y;
@@ -91,24 +64,38 @@ function findRandomPosition(){
         fruitIsOnSnake=false;
         x = Math.floor(gameAreaWidth/snakeSize*Math.random());
         y = Math.floor(gameAreaHeight/snakeSize*Math.random());
-        for(var i=0;i<snake.body.length;i++){
-            if(x==snake.body[i].x && y==snake.body[i].y){
+        for(var i = 0; i < snake.body.length; i++){
+            if(x == snake.body[i].x && y == snake.body[i].y){
                 fruitIsOnSnake = true;
-                i=snake.body.length; //to avoid unnecessary loop
+                i = snake.body.length; //to avoid unnecessary loop
             }
         }
     }
-    fruit.x = x;
-    fruit.y = y;
+    fruit.setXY(x,y);
 }
 
-function drawSnakeFruit(){
-    gameArea.innerHTML = "";
-    gameArea.appendChild(fruit.piece);
-    for(var i of snake.body){
-        gameArea.appendChild(i.piece);
+function checkSnakeEatFruit(){
+    var length = snake.body.length;
+    var x = snake.body[length-1].x, y = snake.body[length-1].y;
+
+    //Snake eat fruit
+    if(snake.body[0].x === fruit.x && snake.body[0].y === fruit.y){
+        var snakeNewPiece = new Square(snakeSize, snakeSize, snakeColor, x, y);
+        snake.body.push(snakeNewPiece);
+        findRandomPosition(); //fruit new position
+        increaseScore();
     }
-    gameArea.appendChild(fruit.piece);
+}
+
+function checkSnakeEatSnake(){
+    var length = snake.body.length;
+
+    //Snake eat snake
+    for(var i = 1; i < length; i++){
+        if(snake.body[0].x === snake.body[i].x && snake.body[0].y === snake.body[i].y){
+            snake.isAlive = false;
+        }
+    }
 }
 
 function resetScore(){
@@ -127,10 +114,28 @@ function writeScore(){
     scoreDisplay.value = "Score: "+score;
 }
 
-setTimeout(writeHelloWorld(),snakeSpeed);
+//Game loop
+setTimeout(gameLoop(),snakeSpeed);
 
-function writeHelloWorld(){
-    updateMouvement();
-    drawSnakeFruit();
-    setTimeout(writeHelloWorld,snakeSpeed);
+function gameLoop(){
+    snake.move();
+    checkSnakeEatFruit();
+    checkSnakeEatSnake();
+
+    var length = snake.body.length;
+    if(!snake.isAlive){
+        resetScore();
+        for(var i = 1; i < length-3; i++){
+            snake.body[length-i].removeDiv();
+            snake.body.splice(length-i);
+        }
+        snake.body[0].setXY(initialX, initialY);
+        snake.body[1].setXY(initialX, initialY-1);
+        snake.body[2].setXY(initialX, initialY-2);
+        snake.body[3].setXY(initialX, initialY-3);
+        snake.direction = "down";
+        snake.isAlive = true;
+    }
+
+    setTimeout(gameLoop,snakeSpeed);
 }
