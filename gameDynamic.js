@@ -27,8 +27,8 @@ class Snake{
             snake.body[0].setXY(x-1, y);
         }
 
-        x = snake.body[0].x, y=snake.body[0].y;
         //When snake is outside gameArea
+        x = snake.body[0].x, y=snake.body[0].y; 
         if(snake.body[0].x < 0){
             snake.body[0].setXY(gameAreaWidth/snakeSize-1, y);
         }else if(snake.body[0].x > gameAreaWidth/snakeSize-1){
@@ -39,22 +39,49 @@ class Snake{
             snake.body[0].setXY(x, 0);
         }
     }
+
+    resetSnake(){
+        var length = snake.body.length;
+        resetScore();
+        for(var i = 1; i < length-3; i++){
+            snake.body[length-i].removeDiv();
+            snake.body.splice(length-i);
+        }
+        snake.body[0].setXY(initialX, initialY);
+        snake.body[1].setXY(initialX, initialY-1);
+        snake.body[2].setXY(initialX, initialY-2);
+        snake.body[3].setXY(initialX, initialY-3);
+        snake.direction = "down";
+        snake.isAlive = true;
+    }
 }
 var snake = new Snake("down", [head, piece1, piece2, piece3]);
 
 document.addEventListener("keydown",function(event){
     //Read input
+
     //  Prevent turnback and eat it own
     var key = event.key, keyCode = event.keyCode;
-    if((key==="w" || key =="W" || keyCode =="38") && snake.direction!=="down"){
+    if((key.toUpperCase() === "W" || keyCode == "38") && snake.direction!=="down"){
         snake.direction = "up";
-    }else if((key==="s" || key =="S" || keyCode =="40") && snake.direction!=="up"){
+    }else if((key.toUpperCase() === "S" || keyCode =="40") && snake.direction!=="up"){
         snake.direction = "down";
-    }else if((key==="d" || key =="D" || keyCode =="39") && snake.direction!=="left"){
+    }else if((key.toUpperCase() === "D" || keyCode =="39") && snake.direction!=="left"){
         snake.direction = "right";
-    }else if((key==="a" || key =="A" || keyCode =="37") && snake.direction!=="right"){
+    }else if((key.toUpperCase() === "A" || keyCode =="37") && snake.direction!=="right"){
         snake.direction = "left";
     }
+    
+    //Pause
+    if(key.toUpperCase() === "P"){
+        startHelpScreen.pausePlay();
+    }
+
+    //Restart
+    if(key.toUpperCase() === "R"){
+        startHelpScreen.startStop();
+    }
+
 });
 
 function findRandomPosition(){
@@ -114,27 +141,21 @@ function writeScore(){
     scoreDisplay.value = "Score: "+score;
 }
 
+
+startHelpScreen.stop();
+
 //Game loop
 setTimeout(gameLoop(),snakeSpeed);
 
 function gameLoop(){
-    snake.move();
-    checkSnakeEatFruit();
-    checkSnakeEatSnake();
+    if(!startHelpScreen.gameOver && !startHelpScreen.gameIsOnPause){
+        snake.move();
+        checkSnakeEatFruit();
+        checkSnakeEatSnake();
 
-    var length = snake.body.length;
-    if(!snake.isAlive){
-        resetScore();
-        for(var i = 1; i < length-3; i++){
-            snake.body[length-i].removeDiv();
-            snake.body.splice(length-i);
+        if(!snake.isAlive){
+            startHelpScreen.stop();
         }
-        snake.body[0].setXY(initialX, initialY);
-        snake.body[1].setXY(initialX, initialY-1);
-        snake.body[2].setXY(initialX, initialY-2);
-        snake.body[3].setXY(initialX, initialY-3);
-        snake.direction = "down";
-        snake.isAlive = true;
     }
 
     setTimeout(gameLoop,snakeSpeed);
