@@ -91,12 +91,11 @@ function findRandomPosition(){
         fruitIsOnSnake=false;
         x = Math.floor(gameAreaWidth/snakeSize*Math.random());
         y = Math.floor(gameAreaHeight/snakeSize*Math.random());
-        for(var i = 0; i < snake.body.length; i++){
-            if(x == snake.body[i].x && y == snake.body[i].y){
+
+        snake.body.forEach((item)=>{
+            if(x === item.x && y === item.y)
                 fruitIsOnSnake = true;
-                i = snake.body.length; //to avoid unnecessary loop
-            }
-        }
+        });
     }
     fruit.setXY(x,y);
 }
