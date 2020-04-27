@@ -1,9 +1,19 @@
-import {snakeSize, initialX, initialY,gameAreaWidth,gameAreaHeight,startHelpScreenWidth,startHelpScreenHeight,gameAreaBorder,startHelpScreenBorder,startHelpScreenColor,snakeColor,fruitColor,gameAreaColor,snakeHeadColor,snakeInitialSpeed} from './parameters';
-
 import Snake from './snake';
 import StartHelpScreen from './startHelpScreen';
 import Square from './square';
 import GameScore from './gameScore';
+import * as param from './parameters';
+
+var snakeSize = param.snakeSize;
+var gameAreaWidth = param.gameAreaWidth
+var gameAreaHeight = param.gameAreaHeight
+var startHelpScreenWidth = param.startHelpScreenWidth
+var startHelpScreenHeight = param.startHelpScreenHeight
+var gameAreaBorder = param.gameAreaBorder
+var startHelpScreenBorder = param.startHelpScreenBorder
+var startHelpScreenColor = param.startHelpScreenColor
+var fruitColor = param.fruitColor
+var gameAreaColor = param.gameAreaColor
 
 //Start Help Screen
 var startHelpScreen = new StartHelpScreen(startHelpScreenWidth, startHelpScreenHeight, startHelpScreenColor, (gameAreaWidth/2-startHelpScreenWidth/2)/snakeSize, (gameAreaHeight/2-startHelpScreenHeight/2)/snakeSize, startHelpScreenBorder);

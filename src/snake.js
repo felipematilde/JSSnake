@@ -1,5 +1,14 @@
-import {snakeSize, initialX, initialY,gameAreaWidth,gameAreaHeight,startHelpScreenWidth,startHelpScreenHeight,gameAreaBorder,startHelpScreenBorder,startHelpScreenColor,snakeColor,fruitColor,gameAreaColor,snakeHeadColor,snakeInitialSpeed} from './parameters';
 import Square from './square';
+import * as param from './parameters';
+
+var snakeSize = param.snakeSize;
+var gameAreaWidth = param.gameAreaWidth
+var gameAreaHeight = param.gameAreaHeight
+var snakeHeadColor = param.snakeHeadColor;
+var snakeColor = param.snakeColor;
+var snakeInitialSpeed = param.snakeInitialSpeed;
+var initialX = param.initialX;
+var initialY = param.initialY;
 
 export default class Snake{
     //Attributes:

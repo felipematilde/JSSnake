@@ -1,5 +1,6 @@
 import Square from './square'
-import {snakeSize, initialX, initialY,gameAreaWidth,gameAreaHeight,startHelpScreenWidth,startHelpScreenHeight,gameAreaBorder,startHelpScreenBorder,startHelpScreenColor,snakeColor,fruitColor,gameAreaColor,snakeHeadColor,snakeInitialSpeed} from './parameters';
+import * as param from './parameters';
+var startHelpScreenBorder = param.startHelpScreenBorder
 
 export default class StartHelpScreen{
     //Attributes:

@@ -1,7 +1,13 @@
-import {snakeSize, initialX, initialY,gameAreaWidth,gameAreaHeight,startHelpScreenWidth,startHelpScreenHeight,gameAreaBorder,startHelpScreenBorder,startHelpScreenColor,snakeColor,fruitColor,gameAreaColor,snakeHeadColor,snakeInitialSpeed} from './parameters';
+import * as param from './parameters';
+
+var gameAreaWidth = param.gameAreaWidth
+var gameAreaHeight = param.gameAreaHeight
 
 //GameScore
 export default class GameScore{
+    //Attributes:
+    //   score;
+    //   scoreDisplay;
     constructor(){
         this.score = 0;
         this.scoreDisplay = document.createElement("output");
