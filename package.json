@@ -1,0 +1,22 @@
+{
+  "name": "jsnake",
+  "version": "1.3.0",
+  "description": "JSSnake",
+  "main": "bundle.js",
+  "repository": "https://github.com/felipematilde/JSSnake.git",
+  "author": "FREM <58148463+felipematilde@users.noreply.github.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.9.5",
+    "@babel/preset-env": "^7.9.5",
+    "babel-loader": "^8.1.0",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11"
+  },
+  "scripts": {
+    "dev": "babel ./main.js -o bundle.js -w",
+    "devWP": "webpack --mode=development -w"
+  }
+}
